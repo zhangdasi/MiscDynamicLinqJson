@@ -1,0 +1,447 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ZhangDasiDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="CarID" />
+          </Key>
+          <Property Name="CarID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Vendor" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Model" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="Image" Type="image" />
+        </EntityType>
+        <EntityType Name="CarContact">
+          <Key>
+            <PropertyRef Name="ContactID" />
+          </Key>
+          <Property Name="ContactID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CarID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CarManual">
+          <Key>
+            <PropertyRef Name="CarID" />
+          </Key>
+          <Property Name="CarID" Type="int" Nullable="false" />
+          <Property Name="CarManual" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CarTenant">
+          <Key>
+            <PropertyRef Name="CarID" />
+            <PropertyRef Name="TenantID" />
+          </Key>
+          <Property Name="CarID" Type="int" Nullable="false" />
+          <Property Name="TenantID" Type="int" Nullable="false" />
+          <Property Name="StartDatetime" Type="datetime" Nullable="false" />
+          <Property Name="EndDatetime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CarTT">
+          <Key>
+            <PropertyRef Name="CarID" />
+            <PropertyRef Name="TTID" />
+          </Key>
+          <Property Name="CarID" Type="int" Nullable="false" />
+          <Property Name="TTID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6005: 目标实体框架版本目前不支持数据类型“hierarchyid”；已排除表“ZhangDasiDB.dbo.Employees”中的列“Org_Id”。
+警告 6002: 表/视图“ZhangDasiDB.dbo.Employees”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+            <PropertyRef Name="EmployeeName" />
+            <PropertyRef Name="Title" />
+          </Key>
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="EmployeeName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tenant">
+          <Key>
+            <PropertyRef Name="TenantID" />
+          </Key>
+          <Property Name="TenantID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TestTT">
+          <Key>
+            <PropertyRef Name="TestID" />
+          </Key>
+          <Property Name="TestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_CarContact_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="1" />
+          <End Role="CarContact" Type="Self.CarContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="CarID" />
+            </Principal>
+            <Dependent Role="CarContact">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarManual_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="1" />
+          <End Role="CarManual" Type="Self.CarManual" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="CarID" />
+            </Principal>
+            <Dependent Role="CarManual">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarTenant_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="1" />
+          <End Role="CarTenant" Type="Self.CarTenant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="CarID" />
+            </Principal>
+            <Dependent Role="CarTenant">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarTenant_Tenant">
+          <End Role="Tenant" Type="Self.Tenant" Multiplicity="1" />
+          <End Role="CarTenant" Type="Self.CarTenant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tenant">
+              <PropertyRef Name="TenantID" />
+            </Principal>
+            <Dependent Role="CarTenant">
+              <PropertyRef Name="TenantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarTT_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="1" />
+          <End Role="CarTT" Type="Self.CarTT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="CarID" />
+            </Principal>
+            <Dependent Role="CarTT">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarTT_TestTT">
+          <End Role="TestTT" Type="Self.TestTT" Multiplicity="1" />
+          <End Role="CarTT" Type="Self.CarTT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestTT">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="CarTT">
+              <PropertyRef Name="TTID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ZhangDasiDBModelStoreContainer">
+          <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarContact" EntityType="Self.CarContact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarManual" EntityType="Self.CarManual" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarTenant" EntityType="Self.CarTenant" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarTT" EntityType="Self.CarTT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tenant" EntityType="Self.Tenant" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TestTT" EntityType="Self.TestTT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Employees].[EmployeeId] AS [EmployeeId], 
+    [Employees].[EmployeeName] AS [EmployeeName], 
+    [Employees].[Title] AS [Title]
+    FROM [dbo].[Employees] AS [Employees]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_CarContact_Car" Association="Self.FK_CarContact_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarContact" EntitySet="CarContact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarManual_Car" Association="Self.FK_CarManual_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarManual" EntitySet="CarManual" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarTenant_Car" Association="Self.FK_CarTenant_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarTenant" EntitySet="CarTenant" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarTenant_Tenant" Association="Self.FK_CarTenant_Tenant">
+            <End Role="Tenant" EntitySet="Tenant" />
+            <End Role="CarTenant" EntitySet="CarTenant" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarTT_Car" Association="Self.FK_CarTT_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarTT" EntitySet="CarTT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarTT_TestTT" Association="Self.FK_CarTT_TestTT">
+            <End Role="TestTT" EntitySet="TestTT" />
+            <End Role="CarTT" EntitySet="CarTT" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ZhangDasiDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Tenant">
+          <Key>
+            <PropertyRef Name="TenantID" />
+          </Key>
+          <Property Name="TenantID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CarTenant" Relationship="ZhangDasiDBModel.FK_CarTenant_Tenant" FromRole="Tenant" ToRole="CarTenant" />
+        </EntityType>
+        <EntityContainer Name="ZhangDasiDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Tenant" EntityType="Self.Tenant" />
+          <EntitySet Name="Car" EntityType="ZhangDasiDBModel.Car" />
+          <EntitySet Name="CarContact" EntityType="ZhangDasiDBModel.CarContact" />
+          <EntitySet Name="CarManual" EntityType="ZhangDasiDBModel.CarManual" />
+          <EntitySet Name="CarTenant" EntityType="ZhangDasiDBModel.CarTenant" />
+          <EntitySet Name="TestTT" EntityType="ZhangDasiDBModel.TestTT" />
+          <EntitySet Name="Employees" EntityType="ZhangDasiDBModel.Employees" />
+          <AssociationSet Name="FK_CarContact_Car" Association="ZhangDasiDBModel.FK_CarContact_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarContact" EntitySet="CarContact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarManual_Car" Association="ZhangDasiDBModel.FK_CarManual_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarManual" EntitySet="CarManual" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarTenant_Car" Association="ZhangDasiDBModel.FK_CarTenant_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="CarTenant" EntitySet="CarTenant" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarTenant_Tenant" Association="ZhangDasiDBModel.FK_CarTenant_Tenant">
+            <End Role="Tenant" EntitySet="Tenant" />
+            <End Role="CarTenant" EntitySet="CarTenant" />
+          </AssociationSet>
+          <AssociationSet Name="CarTT" Association="ZhangDasiDBModel.CarTT">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="TestTT" EntitySet="TestTT" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="CarID" />
+          </Key>
+          <Property Name="CarID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Vendor" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="CarContact" Relationship="ZhangDasiDBModel.FK_CarContact_Car" FromRole="Car" ToRole="CarContact" />
+          <NavigationProperty Name="CarManual" Relationship="ZhangDasiDBModel.FK_CarManual_Car" FromRole="Car" ToRole="CarManual" />
+          <NavigationProperty Name="CarTenant" Relationship="ZhangDasiDBModel.FK_CarTenant_Car" FromRole="Car" ToRole="CarTenant" />
+          <NavigationProperty Name="TestTT" Relationship="ZhangDasiDBModel.CarTT" FromRole="Car" ToRole="TestTT" />
+        </EntityType>
+        <EntityType Name="CarContact">
+          <Key>
+            <PropertyRef Name="ContactID" />
+          </Key>
+          <Property Name="ContactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CarID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Car" Relationship="ZhangDasiDBModel.FK_CarContact_Car" FromRole="CarContact" ToRole="Car" />
+        </EntityType>
+        <EntityType Name="CarManual">
+          <Key>
+            <PropertyRef Name="CarID" />
+          </Key>
+          <Property Name="CarID" Type="Int32" Nullable="false" />
+          <Property Name="CarManual1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Car" Relationship="ZhangDasiDBModel.FK_CarManual_Car" FromRole="CarManual" ToRole="Car" />
+        </EntityType>
+        <EntityType Name="CarTenant">
+          <Key>
+            <PropertyRef Name="CarID" />
+            <PropertyRef Name="TenantID" />
+          </Key>
+          <Property Name="CarID" Type="Int32" Nullable="false" />
+          <Property Name="TenantID" Type="Int32" Nullable="false" />
+          <Property Name="StartDatetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDatetime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Car" Relationship="ZhangDasiDBModel.FK_CarTenant_Car" FromRole="CarTenant" ToRole="Car" />
+          <NavigationProperty Name="Tenant" Relationship="ZhangDasiDBModel.FK_CarTenant_Tenant" FromRole="CarTenant" ToRole="Tenant" />
+        </EntityType>
+        <EntityType Name="TestTT">
+          <Key>
+            <PropertyRef Name="TestID" />
+          </Key>
+          <Property Name="TestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Car" Relationship="ZhangDasiDBModel.CarTT" FromRole="TestTT" ToRole="Car" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+            <PropertyRef Name="EmployeeName" />
+            <PropertyRef Name="Title" />
+          </Key>
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_CarContact_Car">
+          <End Type="ZhangDasiDBModel.Car" Role="Car" Multiplicity="1" />
+          <End Type="ZhangDasiDBModel.CarContact" Role="CarContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="CarID" />
+            </Principal>
+            <Dependent Role="CarContact">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarManual_Car">
+          <End Type="ZhangDasiDBModel.Car" Role="Car" Multiplicity="1" />
+          <End Type="ZhangDasiDBModel.CarManual" Role="CarManual" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="CarID" />
+            </Principal>
+            <Dependent Role="CarManual">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarTenant_Car">
+          <End Type="ZhangDasiDBModel.Car" Role="Car" Multiplicity="1" />
+          <End Type="ZhangDasiDBModel.CarTenant" Role="CarTenant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="CarID" />
+            </Principal>
+            <Dependent Role="CarTenant">
+              <PropertyRef Name="CarID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarTenant_Tenant">
+          <End Type="ZhangDasiDBModel.Tenant" Role="Tenant" Multiplicity="1" />
+          <End Type="ZhangDasiDBModel.CarTenant" Role="CarTenant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tenant">
+              <PropertyRef Name="TenantID" />
+            </Principal>
+            <Dependent Role="CarTenant">
+              <PropertyRef Name="TenantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CarTT">
+          <End Type="ZhangDasiDBModel.Car" Role="Car" Multiplicity="*" />
+          <End Type="ZhangDasiDBModel.TestTT" Role="TestTT" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ZhangDasiDBModelStoreContainer" CdmEntityContainer="ZhangDasiDBEntities">
+          <EntitySetMapping Name="Tenant">
+            <EntityTypeMapping TypeName="ZhangDasiDBModel.Tenant">
+              <MappingFragment StoreEntitySet="Tenant">
+                <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Car">
+            <EntityTypeMapping TypeName="ZhangDasiDBModel.Car">
+              <MappingFragment StoreEntitySet="Car">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Vendor" ColumnName="Vendor" />
+                <ScalarProperty Name="CarID" ColumnName="CarID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CarContact">
+            <EntityTypeMapping TypeName="ZhangDasiDBModel.CarContact">
+              <MappingFragment StoreEntitySet="CarContact">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CarID" ColumnName="CarID" />
+                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CarManual">
+            <EntityTypeMapping TypeName="ZhangDasiDBModel.CarManual">
+              <MappingFragment StoreEntitySet="CarManual">
+                <ScalarProperty Name="CarManual1" ColumnName="CarManual" />
+                <ScalarProperty Name="CarID" ColumnName="CarID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CarTenant">
+            <EntityTypeMapping TypeName="ZhangDasiDBModel.CarTenant">
+              <MappingFragment StoreEntitySet="CarTenant">
+                <ScalarProperty Name="EndDatetime" ColumnName="EndDatetime" />
+                <ScalarProperty Name="StartDatetime" ColumnName="StartDatetime" />
+                <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+                <ScalarProperty Name="CarID" ColumnName="CarID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestTT">
+            <EntityTypeMapping TypeName="ZhangDasiDBModel.TestTT">
+              <MappingFragment StoreEntitySet="TestTT">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="ZhangDasiDBModel.Employees">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="CarTT" TypeName="ZhangDasiDBModel.CarTT" StoreEntitySet="CarTT">
+            <EndProperty Name="TestTT">
+              <ScalarProperty Name="TestID" ColumnName="TTID" />
+            </EndProperty>
+            <EndProperty Name="Car">
+              <ScalarProperty Name="CarID" ColumnName="CarID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

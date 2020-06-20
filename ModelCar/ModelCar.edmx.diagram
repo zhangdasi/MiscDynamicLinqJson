@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="24de6664b6c7408ca995db3f731852dd" Name="Diagram1">
+        <EntityTypeShape EntityType="ZhangDasiDBModel.Tenant" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZhangDasiDBModel.Car" Width="1.5" PointX="3.75" PointY="4.625" />
+        <EntityTypeShape EntityType="ZhangDasiDBModel.CarContact" Width="1.5" PointX="6" PointY="10.375" />
+        <EntityTypeShape EntityType="ZhangDasiDBModel.CarManual" Width="1.5" PointX="6" PointY="2.75" />
+        <EntityTypeShape EntityType="ZhangDasiDBModel.CarTenant" Width="1.5" PointX="9" PointY="3" />
+        <EntityTypeShape EntityType="ZhangDasiDBModel.TestTT" Width="1.5" PointX="6" PointY="7.875" />
+        <EntityTypeShape EntityType="ZhangDasiDBModel.Employees" Width="1.5" PointX="0.75" PointY="3.75" />
+        <AssociationConnector Association="ZhangDasiDBModel.FK_CarContact_Car" />
+        <AssociationConnector Association="ZhangDasiDBModel.FK_CarManual_Car" />
+        <AssociationConnector Association="ZhangDasiDBModel.FK_CarTenant_Car" />
+        <AssociationConnector Association="ZhangDasiDBModel.FK_CarTenant_Tenant" />
+        <AssociationConnector Association="ZhangDasiDBModel.CarTT" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
